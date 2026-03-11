@@ -140,7 +140,7 @@ const Form = () => {
         />
         <input 
           type="tel" 
-          placeholder="Телефон" 
+          placeholder="Ваш номер телефона" 
           required
           value={formData.phone}
           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
@@ -217,7 +217,7 @@ export default function App() {
           </div>
 
           <Button variant="outline" className="hidden sm:flex py-2 px-6 text-[10px]" onClick={scrollToForm}>
-            Заказать
+            Оставить заявку
           </Button>
           
           <button className="lg:hidden text-brand-ink">
@@ -411,7 +411,7 @@ export default function App() {
             
             <div className="mt-12">
               <Button variant="white" onClick={scrollToForm}>
-                Заказать услугу
+                Оставить заявку
               </Button>
             </div>
           </div>
@@ -536,7 +536,7 @@ export default function App() {
                   <Phone size={20} />
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-widest text-brand-ink/40">Телефон</p>
+                  <p className="text-[10px] uppercase tracking-wider text-brand-ink/40">Телефон</p>
                   <p className="text-lg font-medium">{CONTACTS.phone}</p>
                 </div>
               </div>
