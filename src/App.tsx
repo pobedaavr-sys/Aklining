@@ -47,7 +47,7 @@ const IMAGES = {
 };
 
 const CONTACTS = {
-  phone: "+7 (980) 066-00-40",
+  phone: "+7 (986) 989-75-69",
   telegram: "https://t.me/spb_alhimik",
   tgNick: "spb_alhimik",
   address: "Лесная, Санкт-Петербург"
@@ -102,14 +102,26 @@ const Form = () => {
     e.preventDefault();
     setStatus('loading');
     
+    const accessKey = import.meta.env.VITE_WEB3FORMS_KEY || "YOUR_ACCESS_KEY_HERE";
+
     try {
-      const response = await fetch('/api/send-telegram', {
+      const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          access_key: accessKey,
+          name: formData.name,
+          phone: formData.phone,
+          from_name: "Сайт Алхимик",
+          subject: "🔔 Новая заявка: Алхимик",
+        }),
       });
       
-      if (response.ok) {
+      const result = await response.json();
+      if (result.success) {
         setStatus('success');
         setFormData({ name: '', phone: '' });
       } else {
