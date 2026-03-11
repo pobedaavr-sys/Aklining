@@ -61,7 +61,7 @@ const SectionTitle = ({ title, subtitle, light = false }: { title: string, subti
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className={`text-4xl md:text-5xl lg:text-6xl mb-6 ${light ? 'text-white' : 'text-brand-ink'}`}
+      className={`text-3xl md:text-5xl lg:text-6xl mb-6 leading-tight ${light ? 'text-white' : 'text-brand-ink'}`}
     >
       {title}
     </motion.h2>
@@ -190,8 +190,11 @@ const Form = () => {
 };
 
 export default function App() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
   const scrollToForm = () => {
     document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' });
+    setIsMenuOpen(false);
   };
 
   return (
@@ -201,7 +204,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex flex-col">
             <span className="text-2xl font-serif tracking-widest uppercase">Алхимик</span>
-            <span className="text-[10px] uppercase tracking-[0.2em] text-brand-ink/40 -mt-1">Premium Cleaning</span>
+            <span className="text-[10px] uppercase tracking-widest text-brand-ink/40 -mt-1">Premium Cleaning</span>
           </div>
           
           <div className="hidden lg:flex items-center gap-8 text-xs uppercase tracking-widest font-medium">
@@ -223,10 +226,45 @@ export default function App() {
             Оставить заявку
           </Button>
           
-          <button className="lg:hidden text-brand-ink">
-            <Menu size={24} />
+          <button 
+            className="lg:hidden text-brand-ink p-2"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
+
+        {/* Mobile Menu Overlay */}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="lg:hidden bg-brand-bg border-b border-brand-muted overflow-hidden"
+            >
+              <div className="px-6 py-8 space-y-6">
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 text-brand-ink/60 text-sm">
+                    <MapPin size={16} className="text-brand-accent" />
+                    <span>{CONTACTS.address}</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-brand-ink/60 text-sm">
+                    <Phone size={16} className="text-brand-accent" />
+                    <span>{CONTACTS.phone}</span>
+                  </div>
+                  <a href={CONTACTS.telegram} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-brand-ink/60 text-sm">
+                    <Send size={16} className="text-brand-accent" />
+                    <span>{CONTACTS.tgNick}</span>
+                  </a>
+                </div>
+                <Button variant="primary" className="w-full" onClick={scrollToForm}>
+                  Оставить заявку
+                </Button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* --- Hero Section --- */}
@@ -238,11 +276,11 @@ export default function App() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <span className="inline-block px-4 py-1 rounded-full border border-brand-accent/30 text-brand-accent text-[10px] uppercase tracking-[0.3em] mb-8">
+              <span className="inline-block px-4 py-1 rounded-full border border-brand-accent/30 text-brand-accent text-[10px] uppercase tracking-widest mb-8">
                 Санкт-Петербург
               </span>
-              <h1 className="text-5xl md:text-7xl lg:text-8xl mb-8 leading-[0.95] tracking-tight">
-                Профессиональный клининг <br />
+              <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl mb-8 leading-[1.2] md:leading-[0.95] tracking-tight break-words">
+                Профессиональный клининг <br className="hidden md:block" />
                 <span className="text-brand-accent italic font-light">частных и коммерческих</span> объектов
               </h1>
               <p className="text-lg md:text-xl text-brand-ink/60 font-light max-w-xl mb-10 leading-relaxed">
@@ -528,7 +566,7 @@ export default function App() {
       <section id="contact-form" className="bg-white">
         <div className="section-padding grid lg:grid-cols-2 gap-20 items-center">
           <div>
-            <h2 className="text-5xl md:text-7xl mb-8">Нужна уборка?</h2>
+            <h2 className="text-4xl md:text-7xl mb-8">Нужна уборка?</h2>
             <p className="text-lg text-brand-ink/60 font-light mb-12 leading-relaxed max-w-lg">
               Опишите задачу или отправьте фото помещения. Мы свяжемся с вами, уточним детали и предложим подходящее решение под ваш объект.
             </p>
@@ -539,7 +577,7 @@ export default function App() {
                   <Phone size={20} />
                 </div>
                 <div>
-                  <p className="text-[10px] uppercase tracking-wider text-brand-ink/40">Телефон</p>
+                  <p className="text-[10px] uppercase tracking-widest text-brand-ink/40">Телефон</p>
                   <p className="text-lg font-medium">{CONTACTS.phone}</p>
                 </div>
               </div>
@@ -548,7 +586,7 @@ export default function App() {
                   <Send size={20} />
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-widest text-brand-ink/40">Telegram</p>
+                  <p className="text-[10px] uppercase tracking-widest text-brand-ink/40">Telegram</p>
                   <a href={CONTACTS.telegram} className="text-lg font-medium hover:text-brand-accent transition-colors">@{CONTACTS.tgNick}</a>
                 </div>
               </div>
