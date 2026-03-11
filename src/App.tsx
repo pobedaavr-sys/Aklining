@@ -96,6 +96,7 @@ const Button = ({ children, onClick, variant = 'primary', className = '' }: { ch
 
 const Form = () => {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
   const [formData, setFormData] = useState({ name: '', phone: '' });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -120,10 +121,12 @@ const Form = () => {
         setTimeout(() => setStatus('idle'), 5000);
       } else {
         setStatus('error');
+        setErrorMessage(result.error || 'Произошла ошибка при отправке');
       }
     } catch (err) {
       console.error('Submission error:', err);
       setStatus('error');
+      setErrorMessage('Сетевая ошибка. Проверьте соединение.');
     }
   };
 
@@ -168,7 +171,7 @@ const Form = () => {
               exit={{ opacity: 0 }}
               className="text-rose-600 text-sm text-center font-medium"
             >
-              Ошибка при отправке. Попробуйте позже.
+              {errorMessage || 'Ошибка при отправке. Попробуйте позже.'}
             </motion.p>
           )}
         </AnimatePresence>

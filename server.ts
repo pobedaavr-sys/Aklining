@@ -25,18 +25,18 @@ async function startServer() {
       }
 
       // Простая проверка формата телефона (цифры, +, -, пробелы, скобки)
-      const phoneRegex = /^[\d\+\-\(\)\s]{7,20}$/;
+      const phoneRegex = /^[\d\+\-\(\)\s]{5,30}$/;
       if (!phoneRegex.test(cleanPhone)) {
-        return res.status(400).json({ error: "Некорректный формат номера телефона" });
+        return res.status(400).json({ error: "Некорректный формат номера телефона (от 5 до 30 символов)" });
       }
 
       // 2. Подготовка данных для Telegram
       const token = process.env.TELEGRAM_BOT_TOKEN;
-      const chatId = "-1003823027748"; // Фиксированный ID чата из ТЗ
+      const chatId = "-1003823027748";
       
-      if (!token) {
-        console.error("TELEGRAM_BOT_TOKEN is missing in environment");
-        return res.status(500).json({ error: "Ошибка конфигурации сервера" });
+      if (!token || token === "8651482632:AAE_CxWl_Zsv8bbzdxaFFSjNGGac97nOWbU" === false && !token.includes(':')) {
+        console.error("TELEGRAM_BOT_TOKEN is missing or invalid");
+        return res.status(500).json({ error: "Сервер не настроен (отсутствует API ключ)" });
       }
 
       const localDateTime = new Date().toLocaleString("ru-RU", { timeZone: "Europe/Moscow" });
