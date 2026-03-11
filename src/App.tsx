@@ -100,34 +100,29 @@ const Form = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (status === 'loading') return;
+    
     setStatus('loading');
     
-    const accessKey = import.meta.env.VITE_WEB3FORMS_KEY || "YOUR_ACCESS_KEY_HERE";
-
     try {
-      const response = await fetch('https://api.web3forms.com/submit', {
+      const response = await fetch('/api/send-lead', {
         method: 'POST',
         headers: { 
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          access_key: accessKey,
-          name: formData.name,
-          phone: formData.phone,
-          from_name: "Сайт Алхимик",
-          subject: "🔔 Новая заявка: Алхимик",
-        }),
+        body: JSON.stringify(formData),
       });
       
       const result = await response.json();
-      if (result.success) {
+      if (response.ok && result.success) {
         setStatus('success');
         setFormData({ name: '', phone: '' });
+        setTimeout(() => setStatus('idle'), 5000);
       } else {
         setStatus('error');
       }
     } catch (err) {
+      console.error('Submission error:', err);
       setStatus('error');
     }
   };
