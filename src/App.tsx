@@ -233,9 +233,12 @@ export default function App() {
       {/* --- Navigation --- */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-brand-bg/80 backdrop-blur-lg border-b border-brand-muted">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex flex-col">
-            <span className="text-2xl font-serif tracking-widest uppercase">Алхимик</span>
-            <span className="text-[10px] uppercase tracking-widest text-brand-ink/40 -mt-1">Premium Cleaning</span>
+          <div className="flex items-center gap-3">
+            <img src="https://raw.githubusercontent.com/pobedaavr-sys/klining/main/%D0%BB%D0%BE%D0%B3%D0%BE.jpg" alt="Алхимик Лого" className="w-12 h-12 object-contain rounded-full" referrerPolicy="no-referrer" />
+            <div className="flex flex-col">
+              <span className="text-2xl font-serif tracking-widest uppercase">Алхимик</span>
+              <span className="text-[10px] uppercase tracking-widest text-brand-ink/40 -mt-1">Premium Cleaning</span>
+            </div>
           </div>
           
           <div className="hidden lg:flex items-center gap-8 text-xs uppercase tracking-widest font-medium">
@@ -635,9 +638,12 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-4 gap-12 mb-20">
             <div className="md:col-span-2">
-              <div className="flex flex-col mb-8">
-                <span className="text-3xl font-serif tracking-widest uppercase text-white">Алхимик</span>
-                <span className="text-[10px] uppercase tracking-[0.2em] text-white/40 -mt-1">Premium Cleaning</span>
+              <div className="flex items-center gap-4 mb-8">
+                <img src="https://raw.githubusercontent.com/pobedaavr-sys/klining/main/%D0%BB%D0%BE%D0%B3%D0%BE.jpg" alt="Алхимик Лого" className="w-16 h-16 object-contain rounded-full brightness-90 opacity-80" referrerPolicy="no-referrer" />
+                <div className="flex flex-col">
+                  <span className="text-3xl font-serif tracking-widest uppercase text-white">Алхимик</span>
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-white/40 -mt-1">Premium Cleaning</span>
+                </div>
               </div>
               <p className="max-w-xs text-sm leading-relaxed">
                 Профессиональный клининг премиального уровня в Санкт-Петербурге. Работаем с 2018 года.
