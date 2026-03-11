@@ -32,20 +32,25 @@ async function startServer() {
 
       // 2. Подготовка данных для Telegram
       const token = process.env.TELEGRAM_BOT_TOKEN;
-      const chatId = "-1003823027748";
+      const chatId = process.env.TELEGRAM_CHAT_ID || "-1003823027748";
       
-      if (!token || token === "8651482632:AAE_CxWl_Zsv8bbzdxaFFSjNGGac97nOWbU" === false && !token.includes(':')) {
-        console.error("TELEGRAM_BOT_TOKEN is missing or invalid");
-        return res.status(500).json({ error: "Сервер не настроен (отсутствует API ключ)" });
+      if (!token || !token.includes(':')) {
+        console.error("TELEGRAM_BOT_TOKEN is missing or invalid format");
+        return res.status(500).json({ error: "Сервер не настроен (отсутствует или неверный API ключ бота)" });
+      }
+
+      if (!chatId) {
+        console.error("TELEGRAM_CHAT_ID is missing");
+        return res.status(500).json({ error: "Сервер не настроен (отсутствует ID чата)" });
       }
 
       const localDateTime = new Date().toLocaleString("ru-RU", { timeZone: "Europe/Moscow" });
       
-      const messageText = `Новая заявка с лендинга «Алхимик»\n\n` +
-                          `👤 Имя: ${cleanName}\n` +
-                          `📞 Телефон: ${cleanPhone}\n` +
-                          `🌐 Источник: Лендинг\n` +
-                          `📅 Дата: ${localDateTime}`;
+      const messageText = `<b>Новая заявка с лендинга «Алхимик»</b>\n\n` +
+                          `👤 <b>Имя:</b> ${cleanName}\n` +
+                          `📞 <b>Телефон:</b> ${cleanPhone}\n` +
+                          `🌐 <b>Источник:</b> Лендинг\n` +
+                          `📅 <b>Дата:</b> ${localDateTime}`;
 
       // 3. Отправка в Telegram
       const telegramUrl = `https://api.telegram.org/bot${token}/sendMessage`;
@@ -59,12 +64,15 @@ async function startServer() {
         }),
       });
 
+      const resultData = await response.json();
+
       if (response.ok) {
         return res.json({ success: true });
       } else {
-        const errorData = await response.json();
-        console.error("Telegram API error:", errorData);
-        return res.status(502).json({ error: "Ошибка при отправке в Telegram" });
+        console.error("Telegram API error:", resultData);
+        // Возвращаем более детальную ошибку для отладки
+        const errorMsg = resultData.description || "Ошибка при отправке в Telegram";
+        return res.status(502).json({ error: errorMsg });
       }
     } catch (error) {
       console.error("Server error:", error);
