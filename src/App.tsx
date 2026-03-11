@@ -79,8 +79,22 @@ const SectionTitle = ({ title, subtitle, light = false }: { title: string, subti
   </div>
 );
 
-const Button = ({ children, onClick, variant = 'primary', className = '' }: { children: React.ReactNode, onClick?: () => void, variant?: 'primary' | 'outline' | 'white', className?: string }) => {
-  const baseStyles = "px-8 py-4 rounded-full transition-all duration-300 font-medium text-sm tracking-wider uppercase flex items-center justify-center gap-2";
+const Button = ({ 
+  children, 
+  onClick, 
+  variant = 'primary', 
+  className = '', 
+  type = 'button',
+  disabled = false 
+}: { 
+  children: React.ReactNode, 
+  onClick?: () => void, 
+  variant?: 'primary' | 'outline' | 'white', 
+  className?: string,
+  type?: 'button' | 'submit',
+  disabled?: boolean
+}) => {
+  const baseStyles = "px-8 py-4 rounded-full transition-all duration-300 font-medium text-sm tracking-wider uppercase flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed";
   const variants = {
     primary: "bg-brand-ink text-white hover:bg-brand-accent",
     outline: "border border-brand-ink text-brand-ink hover:bg-brand-ink hover:text-white",
@@ -88,7 +102,12 @@ const Button = ({ children, onClick, variant = 'primary', className = '' }: { ch
   };
   
   return (
-    <button onClick={onClick} className={`${baseStyles} ${variants[variant]} ${className}`}>
+    <button 
+      type={type}
+      onClick={onClick} 
+      disabled={disabled}
+      className={`${baseStyles} ${variants[variant]} ${className}`}
+    >
       {children}
     </button>
   );
@@ -104,6 +123,7 @@ const Form = () => {
     if (status === 'loading') return;
     
     setStatus('loading');
+    setErrorMessage('');
     
     try {
       const response = await fetch('/api/send-lead', {
@@ -137,42 +157,53 @@ const Form = () => {
           type="text" 
           placeholder="Имя" 
           required
+          disabled={status === 'loading'}
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          className="w-full px-6 py-4 rounded-xl bg-white border border-brand-muted focus:border-brand-accent outline-none transition-colors"
+          className="w-full px-6 py-4 rounded-xl bg-white border border-brand-muted focus:border-brand-accent outline-none transition-colors disabled:opacity-50"
         />
         <input 
           type="tel" 
           placeholder="Ваш номер телефона" 
           required
+          disabled={status === 'loading'}
           value={formData.phone}
           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-          className="w-full px-6 py-4 rounded-xl bg-white border border-brand-muted focus:border-brand-accent outline-none transition-colors"
+          className="w-full px-6 py-4 rounded-xl bg-white border border-brand-muted focus:border-brand-accent outline-none transition-colors disabled:opacity-50"
         />
-        <Button variant="primary" className="w-full" onClick={() => {}}>
+        <Button 
+          type="submit"
+          variant="primary" 
+          className="w-full" 
+          disabled={status === 'loading'}
+        >
           {status === 'loading' ? 'Отправка...' : 'Оставить заявку'}
         </Button>
         
         <AnimatePresence>
           {status === 'success' && (
-            <motion.p 
+            <motion.div 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="text-emerald-600 text-sm text-center font-medium"
+              className="p-4 rounded-xl bg-emerald-50 border border-emerald-100"
             >
-              Заявка успешно отправлена!
-            </motion.p>
+              <p className="text-emerald-700 text-sm text-center font-medium flex items-center justify-center gap-2">
+                <CheckCircle2 size={16} /> Заявка успешно отправлена!
+              </p>
+            </motion.div>
           )}
           {status === 'error' && (
-            <motion.p 
+            <motion.div 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="text-rose-600 text-sm text-center font-medium"
+              className="p-4 rounded-xl bg-rose-50 border border-rose-100"
             >
-              {errorMessage || 'Ошибка при отправке. Попробуйте позже.'}
-            </motion.p>
+              <p className="text-rose-700 text-sm text-center font-medium">
+                {errorMessage || 'Ошибка при отправке. Попробуйте позже.'}
+              </p>
+            </motion.div>
           )}
         </AnimatePresence>
       </form>
